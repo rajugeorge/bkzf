@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html dir='ltr' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+
+<head>
+    <link href='http://www.blogger.com/static/v1/widgets/1007218368-widget_css_bundle.css' rel='stylesheet' type='text/css'/>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'/>
+
+    <title>{% block title %}Welcome!{% endblock %}</title>
+
+    <!-- Description and Keywords (start) -->
+    <meta content='YOUR DESCRIPTION HERE' name='description'/>
+    <meta content='YOUR KEYWORDS HERE' name='keywords'/>
+    <!-- Description and Keywords (end) -->
+    <meta content='Grid' property='og:site_name'/>
+    <meta content='https://grid-soratemplates.blogspot.com/' name='twitter:domain'/>
+    <meta content='' name='twitter:title'/>
+    <meta content='summary' name='twitter:card'/>
+    <meta content='' name='twitter:title'/>
+    <!-- Social Media meta tag need customer customization -->
+    <meta content='Facebook App ID here' property='fb:app_id'/>
+    <meta content='Facebook Admin ID here' property='fb:admins'/>
+    <meta content='@username' name='twitter:site'/>
+    <meta content='@username' name='twitter:creator'/>
+
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+    <meta content='blogger' name='generator'/>
+    <link href="{{ asset('assets/img/favicon.jpg') }}" rel='icon' type='image/x-icon'/>
+    <link href='index.html' rel='canonical'/>
+    <link rel="alternate" type="application/atom+xml" title="Grid - Atom" href="feeds/posts/default" />
+    <link rel="alternate" type="application/rss+xml" title="Grid - RSS" href="feeds/posts/default9522?alt=rss" />
+    <link rel="service.post" type="application/atom+xml" title="Grid - Atom" href="https://www.blogger.com/feeds/8548287445282480269/posts/default" />
+    <!--Can't find substitution for tag [blog.ieCssRetrofitLinks]-->
+    <meta content='https://grid-soratemplates.blogspot.com/' property='og:url'/>
+    <meta content='Grid' property='og:title'/>
+    <meta content='' property='og:description'/>
+
+    <link href="http://fonts.googleapis.com/css?family=Oswald:300" rel="stylesheet" type="text/css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
+    <link href='http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'/>
+
+
+    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet" type="text/css">
+
+    {% block stylesheets %}
+      {#{{ encore_entry_link_tags('app') }}#}
+    {% endblock %}
+
+</head>
+<body>
+    <div class='top_wrapper'>
+        <div id='header-wrapper' itemscope='itemscope'>
+            <div class='ornament'>
+                <div class='container'>
+                    <div class='row'>
+                        <div class='header section' id='header'>
+                            <div class='widget Header' data-version='1' id='Header1'>
+                                <div id='header-inner'>
+                                    <a href='{{ path('index') }}' itemprop='url' style='display: block'>
+                                        <h1><img alt="Grid" style="width:300px;" id="Header1_headerimg" src="{{ asset('assets/img/grid-logo.png') }}"></h1>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='twelve'>
+            <div class='header_right'>
+                <div class='menu-navigation-container' id='top_menu'>
+                    <ul class='sf-menu' id='mainmenu' itemscope='itemscope'>
+                        <li class='current-menu-item {% if app.request.get('_route') == 'index' %} active {% endif %}'><a href='{{ path('index') }}' itemprop='url'><span itemprop='name'>Home</span></a></li>
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        {# <li class="{% if app.request.get('_route') == 'bzkf_upload' %} active {% endif %}"><a href='/bzkf/upload' itemprop='url'><span itemprop='name'>Upload</span></a></li> #}
+                        <li class="{% if app.request.get('_route') == 'bzkf_addstudies' %} active {% endif %}"><a href='{{ path('bzkf_addstudies') }}' itemprop='url'><span itemprop='name'>Add Study</span></a></li>
+                        <li class="{% if app.request.get('_route') == 'logout' %} active {% endif %}"><a href='{{ path('logout') }}' itemprop='url'><span itemprop='name'>Logout</span></a></li>
+                        {% else %}
+                        <li class="{% if app.request.get('_route') == 'login' %} active {% endif %}"><a href='{{ path('login') }}' itemprop='url'><span itemprop='name'>Login</span></a></li>
+                        {% endif %}
+                    </ul>
+                    <div class='search-bar'>
+                        <div class='nav-search'>
+                            <form action='#' id='searchform' method='get' role='search'>
+                                <input class='search_input' id='s' name='q' onblur="if(this.value==&#39;&#39;)this.value=this.defaultValue;" onfocus='if(this.value==this.defaultValue)this.value=&#39;&#39;' type='text' value='Search and hit'/>
+                            </form>
+                            <div class='srch_btn'></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='clear'></div>
+        </div>
+    </div>
+    <div class='clear'></div>
+    <div class='container'>
+        {% block body %}{% endblock %}
+    </div>
+
+    <div id='footer' itemscope='itemscope' itemtype='http://schema.org/WPFooter'>
+        <div class='container'>
+            <div class='row'>
+                <div class='twelve columns wrapper'>
+                    <nav id='social'>
+                        <a class='facebook' href='#' target='_blank'><i class='fa fa-facebook'></i></a>
+                        <a class='twitter' href='#' target='_blank'><i class='fa fa-twitter'></i></a>
+                        <a class='instagram' href='https://www.instagram.com/imdeepsinha/' target='_blank'><i class='fa fa-instagram'></i></a>
+                    </nav> Created By 
+                    <a href='http://soratemplates.com/' id='mycontent' rel='dofollow' title='Blogspot'>SoraTemplates</a>
+                    <div class='rightf'></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    {% block script %}{% endblock %}
+
+</body>
+
+</html>

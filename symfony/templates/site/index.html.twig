@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Index{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+<div class='topimg section' id='topimg'>
+    <div class='widget HTML' data-version='1' id='HTML2'>
+        <div class='clear'></div>
+        <span class='widget-item-control'>
+            <span class='item-control blog-admin'>
+                <a class='quickedit' onclick='return _WidgetManager._PopupConfig(document.getElementById("HTML2"));' rel='nofollow' target='configHTML2' title='Edit'>
+                    <img alt='' height='18' src='http://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+                </a>
+            </span>
+        </span>
+        <div class='clear'></div>
+    </div>
+</div>
+<div class='row'>
+    <div class='twelve columns'>
+        <div id='leftContent'>
+            <div class='inner'>
+                <div class='main section' id='main'>
+                    <div class='widget Blog' data-version='1' id='Blog1'>
+
+                        <div id='post_grids' class='row'>
+
+                            
+
+                        </div>
+                        <div class='blog-pager' id='blog-pager'>
+                            <a class='home-link' href='index.html'>Home</a>
+                            <span id='blog-pager-older-link'>
+                                <a class='blog-pager-older-link' style="height: 22px;width: 65.75px;" href='javascript:void(0)' onclick="showmoreStudy()" id='showmore' title='Older Posts'>Show More</a>
+                            </span>
+                        </div>
+                        <div class='clear'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='clear'></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+    {# <script type='text/javascript' src="{{ asset('assets/js/script.js') }}"></script>
+    <script type="text/javascript" src="http://www.blogger.com/static/v1/widgets/53698643-widgets.js"></script> #}
+    <script>
+    function showmoreStudy(){
+        var url = '{{ path("getstudies") }}';
+        var start = $('#post_grids .study').length;
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {start:start},
+            beforeSend: function() {
+                $('#showmore').html('<img style="height: 100%" src="{{ asset('assets/img/loader-trn.gif') }}">');
+            },
+            success: function(result){
+                if(result){
+                    $("#post_grids").append(result);
+                    $('#showmore').html('Show More');
+                }else{
+                    $('#showmore').hide();
+                }
+            }
+        });
+    }
+    $( document ).ready(function() {
+        showmoreStudy();
+    });
+    </script>
+{% endblock %}

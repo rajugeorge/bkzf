@@ -1,0 +1,177 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Study{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+{% endblock %}
+
+{% block body %}
+<div class='topimg section' id='topimg'>
+    <div class='widget HTML' data-version='1' id='HTML2'>
+        <div class='clear'></div>
+        <span class='widget-item-control'>
+            <span class='item-control blog-admin'>
+                <a class='quickedit' title='Edit'>
+                    <img alt='' height='18' src='http://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+                </a>
+            </span>
+        </span>
+        <div class='clear'></div>
+    </div>
+</div>
+<div class='row'>
+    <div class='twelve columns'>
+        <div id='leftContent'>
+            <div class='inner'>
+                <div class='main section' id='main'>
+                    <div class='widget Blog' data-version='1' id='Blog1'>
+                        <div id='post_grids' class='row'>
+                            <div class="login" class="col-md-12">
+                                <form action="{{path('bzkf_addstudiesprocess')}}" method="POST" enctype="multipart/form-data">
+                                    <div class="col-md-12 nopadding">
+                                        <div class="form-group col-md-6">
+                                            <label>Reference study</label>
+                                            <select class="form-control" name="reference_study">
+                                                <option value=''></option>
+                                                {% for study in studies %}
+                                                <option value="{{ study.id }}">{{ study.shortTitle }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Short Title</label>
+                                            <input class="form-control" required name="short_title" placeholder="Short Title">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 nopadding">
+                                        <div class="form-group col-md-6">
+                                            <label>Title</label>
+                                            <input class="form-control" required name="title" placeholder="Title">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Description</label>
+                                            <textarea class="form-control" name="description" placeholder="Description"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 nopadding">
+                                        <div class="form-group col-md-6">
+                                            <label>Study Phase</label>
+                                            <select class="form-control" required name="study_phase_id">
+                                                {% for studyPhase in studyPhases %}
+                                                <option value="{{ studyPhase.id }}">{{ studyPhase.title }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>EudraCT</label>
+                                            <input class="form-control" name="eudra_ct" placeholder="EudraCT">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 nopadding">
+                                        <div class="form-group col-md-6">
+                                            <label>NCT</label>
+                                            <input class="form-control" name="nct" placeholder="NCT">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>DRKS</label>
+                                            <input class="form-control" name="drks" placeholder="DRKS">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 nopadding">
+                                        <div class="form-group col-md-6" id="diagnoses_code_div">
+                                            <label style="width: 100%;">Diagnoses Code (ICD10) <button onclick="add_diagnoses_code()" title="Add More" type="button" style="float:right;float: right;padding: 5px 7px;height: 25px;line-height: 1;" class="btn btn-default">+</button></label>
+                                            <input class="form-control" name="diagnoses_code[]" placeholder="Diagnoses Code (ICD10)">
+                                        </div>
+                                        <div class="form-group col-md-6" id="mutations_div">
+                                            <label style="width: 100%;">Mutations <button onclick="add_mutations()" title="Add More" type="button" style="float:right;float: right;padding: 5px 7px;height: 25px;line-height: 1;" class="btn btn-default">+</button></label>
+                                            <input class="form-control" name="mutations[]" placeholder="Mutations">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 nopadding">
+                                        <div class="form-group col-md-6">
+                                            <label style="width: 100%;">Category Diseases</label>
+                                            <select class="form-control" required id="category_diseases" name="category_diseases[]">
+                                                <option value="">--Select Diseases</option>
+                                                {% for categoryDiseas in categoryDiseases %}
+                                                <option value="{{ categoryDiseas.id }}">{{ categoryDiseas.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label style="width: 100%;">Sub Category Diseases</label>
+                                            <select class="form-control" name="category_diseases[]" id="category_diseases_sub">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 nopadding">
+                                        <div class="form-group col-md-6">
+                                            <label style="width: 100%;">University</label>
+                                            <select class="form-control" id="university_hospitals_id" name="university_hospitals_id">
+                                                <option value="">--Select University</option>
+                                                {% for universityHospital in universityHospitals %}
+                                                <option value="{{ universityHospital.id }}">{{ universityHospital.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label style="width: 100%;">Hospital Location</label>
+                                            <select class="form-control" required multiple name="hospitals_locations[]" id="hospitals_locations">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-default">Add</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class='clear'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='clear'></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+function add_diagnoses_code(){
+    var str = '<input class="form-control" style="margin-top: 10px;" name="diagnoses_code[]" placeholder="Diagnoses Code (ICD10)">';
+    $('#diagnoses_code_div').append(str);
+}
+function add_mutations(){
+    var str = '<input class="form-control" style="margin-top: 10px;" name="mutations[]" placeholder="Mutations">';
+    $('#mutations_div').append(str);
+}
+$( document ).ready(function() {
+    $('#university_hospitals_id').change(function(){
+        var url = '{{ path("bzkf_getlocation") }}';
+        var hId = $(this).val();
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {hId:hId},
+            success: function(result){
+                $('#hospitals_locations').html(result);
+            }
+        });
+    });
+    $('#category_diseases').change(function(){
+        var url = '{{ path("bzkf_getsubcategorydiseases") }}';
+        var cId = $(this).val();
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {cId:cId},
+            success: function(result){
+                $('#category_diseases_sub').html(result);
+            }
+        });
+    });
+
+});
+</script>
+{% endblock %}

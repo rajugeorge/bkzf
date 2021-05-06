@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Index{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+<div class='topimg section' id='topimg'>
+    <div class='widget HTML' data-version='1' id='HTML2'>
+        <div class='clear'></div>
+        <span class='widget-item-control'>
+            <span class='item-control blog-admin'>
+                <a class='quickedit' onclick='return _WidgetManager._PopupConfig(document.getElementById("HTML2"));' rel='nofollow' target='configHTML2' title='Edit'>
+                    <img alt='' height='18' src='http://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+                </a>
+            </span>
+        </span>
+        <div class='clear'></div>
+    </div>
+</div>
+<div class='row'>
+    <div class='twelve columns'>
+        <div id='leftContent'>
+            <div class='inner'>
+                <div class='main section' id='main'>
+                    <div class='widget Blog' data-version='1' id='Blog1'>
+
+                        <div id='post_grids' class='row'>
+
+                            <div class="four columns post_col masonry-brick hentry study" style="width: 100%;">
+                                <div class="post_item">
+                                    <div class="post-body">
+                                        <span id="p8653783103981538811">
+                                            <h3 class="post_item_title" style="margin-bottom: 0;">
+                                                <a rel="bookmark" href="{{ path('viewstudies', {'id': study.id}) }}">{{ study.shortTitle }}</a>
+                                            </h3>
+                                            <div class="post_meta">
+                                                <span class="user">by <span style="color: #09BBB2;">Admin</span></span> <a href="{{ path('bzkf_editstudies',{ 'id': study.id }) }}"><span class="edit">Edit</span></a>
+                                            </div>
+                                            <a href="{{ path('viewstudies', {'id': study.id}) }}">
+                                                <div class="large_thumb thumb_hover">
+                                                    <div class="img_wrapper">
+                                                        <img style="max-width: 100%;max-height: 500px;" class="thumb" src="{{ asset('assets/img/dt-234.jpg') }}">
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="post_item_inner">
+                                                <p>{{ study.title }}</p>
+                                                <div class="clear"></div>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class='clear'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='clear'></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

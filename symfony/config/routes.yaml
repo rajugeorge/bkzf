@@ -1,0 +1,62 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+index:
+   path: /
+   controller: App\Controller\SiteController::index
+
+login:
+   path: /login
+   controller: App\Controller\AuthenticationController::login
+
+logout:
+   path: /logout
+   controller: App\Controller\AuthenticationController::logout
+
+getstudies:
+   path: /getstudies
+   controller: App\Controller\SiteController::getstudies
+   methods: get
+
+viewstudies:
+   path: /{id}/viewstudies
+   controller: App\Controller\SiteController::viewstudies
+
+bzkf_upload:
+   path: /bzkf/upload
+   controller: App\Controller\SiteController::uploadcsv
+
+bzkf_uploadpocess:
+   path: /bzkf/uploadcsvpocess
+   controller: App\Controller\SiteController::uploadcsvpocess
+
+bzkf_addstudies:
+   path: /bzkf/addstudies
+   controller: App\Controller\SiteController::addstudies
+
+bzkf_addstudiesprocess:
+   path: /bzkf/addstudiesprocess
+   controller: App\Controller\SiteController::addstudiesprocess
+
+bzkf_editstudiesprocess:
+   path: /bzkf/editstudiesprocess
+   controller: App\Controller\SiteController::editstudiesprocess
+
+bzkf_getlocation:
+   path: /bzkf/getlocation
+   controller: App\Controller\SiteController::getlocation
+
+bzkf_getsubcategorydiseases:
+   path: /bzkf/getsubcategorydiseases
+   controller: App\Controller\SiteController::getsubcategorydiseases
+
+bzkf_editstudies:
+   path: /bzkf/{id}/edittudies
+   controller: App\Controller\SiteController::editstudies
+
+bzkf_studyjson:
+   path: /bzkf/studyjson
+   controller: App\Controller\SiteController::studyjson
+
+

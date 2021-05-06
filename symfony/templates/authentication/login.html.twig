@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SiteController!{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+{% endblock %}
+
+{% block body %}
+<div class='topimg section' id='topimg'>
+    <div class='widget HTML' data-version='1' id='HTML2'>
+        <div class='clear'></div>
+        <span class='widget-item-control'>
+            <span class='item-control blog-admin'>
+                <a class='quickedit' title='Edit'>
+                    <img alt='' height='18' src='http://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+                </a>
+            </span>
+        </span>
+        <div class='clear'></div>
+    </div>
+</div>
+<div class='row'>
+    <div class='twelve columns'>
+        <div id='leftContent'>
+            <div class='inner'>
+                <div class='main section' id='main'>
+                    <div class='widget Blog' data-version='1' id='Blog1'>
+                        <div id='post_grids' class='row'>
+                            <div class="login" style="width: 300px;margin: auto;margin-bottom: 50px;">
+                                <form action="{{path('login')}}" method="POST">
+                                    <label>Username</label>
+                                    <input class="form-control" placeholder="Username" type="text" value="{{ lastusername }}" name="_username" style="margin-bottom: 15px;" autocomplete="off">
+                                    <label>Password</label>
+                                    <input class="form-control" placeholder="password" type="password" name="_password" style="margin-bottom: 15px;" autocomplete="off">
+                                    <button class="btn btn-primary" type="submit">Login</button>
+                                </form>
+                                {% if error %}
+                                <span class="bmd-form-group" style="text-align: center;">
+                                    <p class="text-danger" style="color:red;">{{ error.messageKey }}</p>
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class='clear'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='clear'></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}{% endblock %}

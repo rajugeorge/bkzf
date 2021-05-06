@@ -1,0 +1,221 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Study{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+{% endblock %}
+
+{% block body %}
+<div class='topimg section' id='topimg'>
+    <div class='widget HTML' data-version='1' id='HTML2'>
+        <div class='clear'></div>
+        <span class='widget-item-control'>
+            <span class='item-control blog-admin'>
+                <a class='quickedit' title='Edit'>
+                    <img alt='' height='18' src='http://resources.blogblog.com/img/icon18_wrench_allbkg.png' width='18'/>
+                </a>
+            </span>
+        </span>
+        <div class='clear'></div>
+    </div>
+</div>
+<div class='row'>
+    <div class='twelve columns'>
+        <div id='leftContent'>
+            <div class='inner'>
+                <div class='main section' id='main'>
+                    <div class='widget Blog' data-version='1' id='Blog1'>
+                        <div id='post_grids' class='row'>
+                            <div class="login" class="col-md-12">
+                                <form action="{{path('bzkf_editstudiesprocess')}}" method="POST" enctype="multipart/form-data">
+                                    <input type="hidden" name="studyid" id="studyid" value="{{ activestudy.id }}">
+                                    <div class="col-md-12 nopadding">
+                                        <div class="form-group col-md-6">
+                                            <label>Reference study</label>
+                                            <select class="form-control" name="reference_study">
+                                                <option value=''></option>
+                                                {% for study in studies %}
+                                                <option value="{{ study.id }}">{{ study.shortTitle }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Short Title</label>
+                                            <input value="{{ activestudy.shortTitle }}" class="form-control" required name="short_title" placeholder="Short Title">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 nopadding">
+                                        <div class="form-group col-md-6">
+                                            <label>Title</label>
+                                            <input value="{{ activestudy.title }}" class="form-control" required name="title" placeholder="Title">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Description</label>
+                                            <textarea class="form-control" name="description" placeholder="Description">{{ activestudy.description }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 nopadding">
+                                        <div class="form-group col-md-6">
+                                            <label>Study Phase</label>
+                                            <select class="form-control" required name="study_phase_id">
+                                                {% for studyPhase in studyPhases %}
+                                                <option value="{{ studyPhase.id }}">{{ studyPhase.title }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>EudraCT</label>
+                                            <input value="{{ activestudy.eudraCt }}" class="form-control" name="eudra_ct" placeholder="EudraCT">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 nopadding">
+                                        <div class="form-group col-md-6">
+                                            <label>NCT</label>
+                                            <input value="{{ activestudy.nct }}" class="form-control" name="nct" placeholder="NCT">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>DRKS</label>
+                                            <input value="{{ activestudy.drks }}" class="form-control" name="drks" placeholder="DRKS">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 nopadding">
+                                        <div class="form-group col-md-6" id="diagnoses_code_div">
+                                            <label style="width: 100%;">Diagnoses Code (ICD10) <button onclick="add_diagnoses_code()" title="Add More" type="button" style="float:right;float: right;padding: 5px 7px;height: 25px;line-height: 1;" class="btn btn-default">+</button></label>
+                                            {% for dc in activestudy.diagnosesCodeIcd10 %}
+                                            <input class="form-control" value="{{ dc.code }}" name="diagnoses_code[]" placeholder="Diagnoses Code (ICD10)">
+                                            {% endfor %}
+                                        </div>
+                                        <div class="form-group col-md-6" id="mutations_div">
+                                            <label style="width: 100%;">Mutations <button onclick="add_mutations()" title="Add More" type="button" style="float:right;float: right;padding: 5px 7px;height: 25px;line-height: 1;" class="btn btn-default">+</button></label>
+                                            {% for mutation in activestudy.mutations %}
+                                            <input value="{{ mutation.mutation }}" class="form-control" name="mutations[]" placeholder="Mutations">
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 nopadding">
+                                        <div class="form-group col-md-6">
+                                            <label style="width: 100%;">Category Diseases</label>
+                                            {% set aP = [] %}
+                                            {% for pcd in activestudy.categoryDiseases %}
+                                                {% if pcd.parent == null %}
+                                                    {% set aP = pcd.id %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            <select class="form-control" required id="category_diseases" name="category_diseases[]">
+                                                <option value="">--Select Diseases</option>
+                                                {% for categoryDiseas in categoryDiseases %}
+                                                    {% if categoryDiseas.id == aP %}
+                                                        {% set select = 'selected' %}
+                                                    {% else %}
+                                                        {% set select = '' %}
+                                                    {% endif %}
+                                                <option {{ select }} value="{{ categoryDiseas.id }}">{{ categoryDiseas.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label style="width: 100%;">Sub Category Diseases</label>
+                                            <select class="form-control" name="category_diseases[]" id="category_diseases_sub">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 nopadding">
+                                        <div class="form-group col-md-6">
+                                            <label style="width: 100%;">University</label>
+                                            {% set ucity = '' %}
+                                            {% for hl in activestudy.hospitalLocations %}
+                                                {% set ucity = hl.universityHospitals.id %}
+                                            {% endfor %}
+                                            <select class="form-control" id="university_hospitals_id" name="university_hospitals_id">
+                                                <option value="">--Select University</option>
+                                                {% for universityHospital in universityHospitals %}
+                                                    {% if universityHospital.id == ucity %}
+                                                        {% set select = 'selected' %}
+                                                    {% else %}
+                                                        {% set select = '' %}
+                                                    {% endif %}
+                                                <option {{ select }} value="{{ universityHospital.id }}">{{ universityHospital.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label style="width: 100%;">Hospital Location</label>
+                                            <select class="form-control" required multiple name="hospitals_locations[]" id="hospitals_locations">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-default">Update</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class='clear'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='clear'></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+function add_diagnoses_code(){
+    var str = '<input class="form-control" style="margin-top: 10px;" name="diagnoses_code[]" placeholder="Diagnoses Code (ICD10)">';
+    $('#diagnoses_code_div').append(str);
+}
+function add_mutations(){
+    var str = '<input class="form-control" style="margin-top: 10px;" name="mutations[]" placeholder="Mutations">';
+    $('#mutations_div').append(str);
+}
+function getlocations(x=null){
+    if(x){
+        var hId = $(x).val();
+    }else{
+        var hId = $('#university_hospitals_id').val();
+    }
+    var url = '{{ path("bzkf_getlocation") }}';
+    
+    var stdid = $('#studyid').val();
+    $.ajax({
+        url: url,
+        type: "GET",
+        data: {hId:hId,stdid:stdid},
+        success: function(result){
+            $('#hospitals_locations').html(result);
+        }
+    });
+}
+function getsubcategorydiseases(x=null){
+    if(x){
+        var cId = $(x).val();
+    }else{
+        var cId = $('#category_diseases').val();
+    }
+    var url = '{{ path("bzkf_getsubcategorydiseases") }}';
+    var stdid = $('#studyid').val();
+    $.ajax({
+        url: url,
+        type: "GET",
+        data: {cId:cId,stdid:stdid},
+        success: function(result){
+            $('#category_diseases_sub').html(result);
+        }
+    });
+}
+$( document ).ready(function() {
+    getlocations();
+    getsubcategorydiseases()
+    $('#university_hospitals_id').change(function(){
+        getlocations(this);
+    });
+    $('#category_diseases').change(function(){
+        getsubcategorydiseases(this)
+    });
+
+});
+</script>
+{% endblock %}
