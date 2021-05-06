@@ -13,7 +13,7 @@ services:
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
         volumes:
             - ./db:/var/lib/mysql
-            - ./dump/:/docker-entrypoint-initdb.d 
+            - ./dump:/docker-entrypoint-initdb.d 
 
     php:
         container_name: php-fpm
