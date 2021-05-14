@@ -8,6 +8,8 @@ use App\Entity\Studies;
 use App\Entity\StudiesJson;
 // use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Elasticsearch\ClientBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -18,10 +20,12 @@ class CreatejsonService
      * @var EntityManager 
      */
     private $entityManager;
+    private $params;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, ParameterBagInterface $params)
     {
         $this->entityManager = $entityManager;
+        $this->params = $params;
     }
 
     public function createjson()
@@ -77,6 +81,7 @@ class CreatejsonService
                     $array = $this->removerkey($array,'parent');
 
                     $stdJson->setStudiesId($stdId);
+                    $stdJson->setIsactive(true);
                     $stdJson->setJson(json_encode($array));
 
                     $manager->persist($stdJson);
@@ -88,9 +93,50 @@ class CreatejsonService
                 $manager->persist($singleStdy);
                 $manager->flush();
             }
+            return true;
         }
         
-        return true;
+        return false;
+    }
+
+    public function indexBuilder(){
+
+        $manager = $this->entityManager;
+        $stdJsons = $manager->getRepository(StudiesJson::class)->findBy(array('isactive'=>true));
+
+        $elasticUrl = $this->params->get('elasticsearch_url');
+
+        $params = ['body' => []];
+        $hosts = [$elasticUrl];
+
+        $client = ClientBuilder::create()->setHosts($hosts)->build();
+
+        foreach($stdJsons as $stdyjson){
+
+            $stdyjson->setIsactive(false);
+            $manager->persist($stdyjson);
+            $manager->flush();
+
+            $params["body"][]= [
+                "update" => [
+                    "_index" => "studies",
+                    "_id" => $stdyjson->getStudiesId()
+                ]
+            ];
+            $params["body"][]= [
+                "doc" => json_decode($stdyjson->getJson()),
+                "doc_as_upsert"=> true
+            ];
+        }
+
+        $responses = false;
+
+        if (!empty($params['body'])) {
+            // Bull import to elasticsearch
+            $responses = $client->bulk($params);
+        }
+
+        return $responses;
     }
 
     protected function removerkey($array,$rkey){

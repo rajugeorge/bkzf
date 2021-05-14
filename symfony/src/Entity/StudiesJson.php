@@ -27,6 +27,11 @@ class StudiesJson
      */
     private $json;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isactive = true;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +57,18 @@ class StudiesJson
     public function setJson(?string $json): self
     {
         $this->json = $json;
+
+        return $this;
+    }
+
+    public function getIsactive(): ?bool
+    {
+        return $this->isactive;
+    }
+
+    public function setIsactive(bool $isactive): self
+    {
+        $this->isactive = $isactive;
 
         return $this;
     }

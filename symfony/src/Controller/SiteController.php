@@ -291,14 +291,14 @@ class SiteController extends AbstractController
             $studyPhase = $StudyPhaseRepository->find($request->request->get('study_phase_id'));
             $studies->setStudyPhase($studyPhase);
         }
-        if($request->request->get('EudraCT')){
-            $studies->setEudraCt($request->request->get('EudraCT'));
+        if($request->request->get('eudra_ct')){
+            $studies->setEudraCt($request->request->get('eudra_ct'));
         }
-        if($request->request->get('NCT')){
-            $studies->setNct($request->request->get('NCT'));
+        if($request->request->get('nct')){
+            $studies->setNct($request->request->get('nct'));
         }
-        if($request->request->get('DRKS')){
-            $studies->setDrks($request->request->get('DRKS'));
+        if($request->request->get('drks')){
+            $studies->setDrks($request->request->get('drks'));
         }
         $userR = $manager->getRepository(User::class);
         $user = $userR->find($userID);
@@ -317,7 +317,7 @@ class SiteController extends AbstractController
 
             foreach($diagnoses_codes as $diagnoses_code){
                 $dcode = new DiagnosesCodeIcd10();
-                $dcode->setCode('test');
+                $dcode->setCode($diagnoses_code);
                 $dcode->setStudies($studies);
                 $manager->persist($dcode);
                 $manager->flush();

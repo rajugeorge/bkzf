@@ -2,14 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\QueueTable;
-use App\Entity\Studies;
-use App\Entity\StudiesJson;
 use App\Service\CreatejsonService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CronController extends AbstractController
@@ -20,8 +14,22 @@ class CronController extends AbstractController
      */
     public function createjson(CreatejsonService $createJson)
     {
-        $createJson->createjson();
+        $jsonresult = $createJson->createjson();
+        if($jsonresult){
+            $result = $createJson->indexBuilder();
+            dd($result);
+        }else{
+            dd('fails');
+        }
+        
+    }
 
-        dd('success');
+    /**
+     * @Route("/indexbuilder", name="indexbuilder")
+     */
+    public function indexbuilder(CreatejsonService $createJson)
+    {
+        $result = $createJson->indexBuilder();
+        dd($result);
     }
 }

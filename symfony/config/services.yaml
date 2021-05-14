@@ -6,6 +6,7 @@
 parameters:
     csv_directory: '/uploads/csv/'
     site: 'http://127.0.0.1:8000'
+    elasticsearch_url: '%env(ELASTICSEARCH_URL)%'
 services:
     # default configuration for services in *this* file
     _defaults:
