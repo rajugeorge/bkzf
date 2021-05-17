@@ -94,10 +94,9 @@ class CreatejsonService
                 $manager->persist($singleStdy);
                 $manager->flush();
             }
-            return true;
         }
         
-        return false;
+        return true;
     }
 
     public function indexBuilder(){
@@ -132,16 +131,35 @@ class CreatejsonService
 
         $responses = false;
 
+        $dbRevert = false;
+
         if (!empty($params['body'])) {
             // Bull import to elasticsearch
             try{
                 $responses = $client->bulk($params);
             }catch(Exception $e){
                 $responses = $e->getMessage();
+                $dbRevert = true;
             }
+        }
+        // dd($stdJsons);
+        if($dbRevert == true){
+            $this->dbRevert($stdJsons);
         }
 
         return $responses;
+    }
+
+    protected function dbRevert($stdJsons){
+
+        $manager = $this->entityManager;
+
+        foreach($stdJsons as $stdyjson){
+
+            $stdyjson->setIsactive(true);
+            $manager->persist($stdyjson);
+            $manager->flush();
+        }
     }
 
     protected function removerkey($array,$rkey){
