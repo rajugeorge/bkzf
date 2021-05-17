@@ -9,6 +9,7 @@ use App\Entity\StudiesJson;
 // use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Elasticsearch\ClientBuilder;
+use Exception;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -133,7 +134,11 @@ class CreatejsonService
 
         if (!empty($params['body'])) {
             // Bull import to elasticsearch
-            $responses = $client->bulk($params);
+            try{
+                $responses = $client->bulk($params);
+            }catch(Exception $e){
+                $responses = $e->getMessage();
+            }
         }
 
         return $responses;
