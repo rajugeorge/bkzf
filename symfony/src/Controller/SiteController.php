@@ -48,6 +48,9 @@ class SiteController extends AbstractController
         $params = [
             'index' => 'studies',
             'body' => [
+                "sort" => [
+                    [ "id" => ["order" => "desc"]],
+                ],
                 'query' => [
                     "match_all"=> (object)[]
                 ],
