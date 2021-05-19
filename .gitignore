@@ -1,8 +1,11 @@
 # volumes
 /logs
 /db
+/elastic
 
 /.env.*
+
+.DS_Store
 
 # IDE setting
 ## PhpStorm
