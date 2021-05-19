@@ -83,3 +83,10 @@ services:
             ELASTICSEARCH_HOSTS: http://elasticsearch:9200
         ports:
             - "${KIBANA_PORT}:5601"
+            
+    ofelia:
+        container_name: ofelia
+        image: mcuadros/ofelia:latest
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./ofelia/config.ini:/etc/ofelia/config.ini
