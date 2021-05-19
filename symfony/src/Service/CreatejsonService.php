@@ -29,7 +29,7 @@ class CreatejsonService
         $this->params = $params;
     }
 
-    public function createjson()
+    public function indexBuilder()
     {
         $pagination = $this->params->get('cronpagination');
 
@@ -38,21 +38,25 @@ class CreatejsonService
         $serializer = new Serializer($normalizers, $encoders);
         $manager = $this->entityManager;
 
+        $elasticUrl = $this->params->get('elasticsearch_url');
+        $params = ['body' => []];
+        $hosts = [$elasticUrl];
+        $client = ClientBuilder::create()->setHosts($hosts)->build();
+
         $queueR = $manager->getRepository(QueueTable::class);
         $queue = $queueR->findBy(array('isrun'=>false),array('id'=>'ASC'),$pagination);
         
         // dd($queue);
 
         $sr = $manager->getRepository(Studies::class);
-        $stdJsonR = $manager->getRepository(StudiesJson::class);
 
         $runStudies = array();
 
         if(!empty($queue)){
-            foreach($queue as $stdId){
+            foreach($queue as $queueStdy){
 
-                $queueId = $stdId->getId();
-                $stdId = $stdId->getStudiesId();
+                $queueId = $queueStdy->getId();
+                $stdId = $queueStdy->getStudiesId();
 
                 if (!in_array($stdId, $runStudies)){
 
@@ -67,26 +71,27 @@ class CreatejsonService
                         }
                     ]);
 
-                    $stdJson = $stdJsonR->findOneBy(array('studiesId'=>$stdId));
-                    if($stdJson === null){
-                        $stdJson = new StudiesJson();
-                    }
-                    $array = json_decode($jsonObject);
+                    $arrayJson = json_decode($jsonObject);
 
-                    $array = $this->removerkey($array,'__initializer__');
-                    $array = $this->removerkey($array,'__cloner__');
-                    $array = $this->removerkey($array,'__isInitialized__');
-                    $array = $this->removerkey($array,'password');
-                    $array = $this->removerkey($array,'children');
-                    $array = $this->removerkey($array,'children');
-                    $array = $this->removerkey($array,'parent');
+                    $arrayJson = $this->removerkey($arrayJson,'__initializer__');
+                    $arrayJson = $this->removerkey($arrayJson,'__cloner__');
+                    $arrayJson = $this->removerkey($arrayJson,'__isInitialized__');
+                    $arrayJson = $this->removerkey($arrayJson,'password');
+                    $arrayJson = $this->removerkey($arrayJson,'children');
+                    $arrayJson = $this->removerkey($arrayJson,'children');
+                    $arrayJson = $this->removerkey($arrayJson,'parent'); 
 
-                    $stdJson->setStudiesId($stdId);
-                    $stdJson->setIsactive(true);
-                    $stdJson->setJson(json_encode($array));
+                    $params["body"][]= [
+                        "update" => [
+                            "_index" => "studies",
+                            "_id" => $stdId
+                        ]
+                    ];
+                    $params["body"][]= [
+                        "doc" => $arrayJson,
+                        "doc_as_upsert"=> true
+                    ];
 
-                    $manager->persist($stdJson);
-                    $manager->flush(); 
                 }
 
                 $singleStdy = $queueR->find($queueId);
@@ -94,72 +99,35 @@ class CreatejsonService
                 $manager->persist($singleStdy);
                 $manager->flush();
             }
+            // dd($params);
+
+            $responses = false;
+            $dbRevert = false;
+
+            if (!empty($params['body'])) {
+                // Bull import to elasticsearch
+                try{
+                    $responses = $client->bulk($params);
+                }catch(Exception $e){
+                    $responses = $e->getMessage();
+                    $dbRevert = true;
+                }
+            }
+            if($dbRevert == true){
+                $this->dbRevert($queue);
+            }
+
+            return $responses;
         }
         
-        return true;
-    }
-
-    public function indexBuilder(){
-
-        $manager = $this->entityManager;
-
-        $pagination = $this->params->get('cronpagination');
-
-        $stdJsons = $manager->getRepository(StudiesJson::class)->findBy(array('isactive'=>true),array(),$pagination);
-
-        $elasticUrl = $this->params->get('elasticsearch_url');
-
-        $params = ['body' => []];
-        $hosts = [$elasticUrl];
-
-        $client = ClientBuilder::create()->setHosts($hosts)->build();
-
-        foreach($stdJsons as $stdyjson){
-
-            $stdyjson->setIsactive(false);
-            $manager->persist($stdyjson);
-            $manager->flush();
-
-            $params["body"][]= [
-                "update" => [
-                    "_index" => "studies",
-                    "_id" => $stdyjson->getStudiesId()
-                ]
-            ];
-            $params["body"][]= [
-                "doc" => json_decode($stdyjson->getJson()),
-                "doc_as_upsert"=> true
-            ];
-        }
-
-        $responses = false;
-
-        $dbRevert = false;
-
-        if (!empty($params['body'])) {
-            // Bull import to elasticsearch
-            try{
-                $responses = $client->bulk($params);
-            }catch(Exception $e){
-                $responses = $e->getMessage();
-                $dbRevert = true;
-            }
-        }
-        // dd($stdJsons);
-        if($dbRevert == true){
-            $this->dbRevert($stdJsons);
-        }
-
-        return $responses;
+        return 'Nothing to Update';
     }
 
     protected function dbRevert($stdJsons){
 
         $manager = $this->entityManager;
-
         foreach($stdJsons as $stdyjson){
-
-            $stdyjson->setIsactive(true);
+            $stdyjson->setIsrun(false);
             $manager->persist($stdyjson);
             $manager->flush();
         }

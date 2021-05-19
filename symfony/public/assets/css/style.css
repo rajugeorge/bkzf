@@ -1125,6 +1125,7 @@ margin-top: 0;
 background: url(../img/icons/search-black-icon.png) 2px center no-repeat;
 text-indent: 9999px;
 position: relative;
+float: right;
 }
 
 /*-------Typography and ShortCodes-------*/

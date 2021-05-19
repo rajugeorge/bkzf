@@ -2,7 +2,9 @@
 
 {% block title %}Index{% endblock %}
 
-{% block stylesheets %}{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+{% endblock %}
 
 {% block body %}
 <div class='topimg section' id='topimg'>
@@ -38,7 +40,7 @@
                         <div class='blog-pager' id='blog-pager'>
                             <a class='home-link' href='index.html'>Home</a>
                             <span id='blog-pager-older-link'>
-                                <a class='blog-pager-older-link' style="height: 22px;width: 65.75px;" href='javascript:void(0)' onclick="showmoreStudy()" id='showmore' title='Older Posts'>Show More</a>
+                                <a class='blog-pager-older-link' style="height: 30px;width: 120px;" href='javascript:void(0)' onclick="showmoreStudy()" id='showmore' title='Older Posts'>Show More</a>
                             </span>
                         </div>
                         <div class='clear'></div>
@@ -112,15 +114,35 @@
         if($el.value != ''){
             $($el).addClass('show');
         }else{
-            $($el).removeClass('show');
+            $("#study_search_list").hide();
+            $("#post_grids").show();
+            $('#showmore').show();
         }
     }
 
     $( document ).ready(function() {
         showmoreStudy();
-        $('#searchstudy').keyup(delay(function (e) {
+        /*$('#searchstudy').keyup(delay(function (e) {
             ajaxsearchstudy(this.value);
-        }, 300));
+        }, 300));*/
+        $('#searchstudy').change(function(){
+            if(this.value == ''){
+                $('#searchstudy').removeClass('show');
+                $("#study_search_list").hide();
+                $("#post_grids").show();
+                $('#showmore').show();
+            }
+        });
+        $('#searchform').submit(function(e){
+            e.preventDefault();
+            var q = $(this).serialize()
+            var url = $(this).attr('action')
+            var values = {};
+            $.each($(this).serializeArray(), function(i, field) {
+                values[field.name] = field.value;
+            });
+            ajaxsearchstudy(values.q);
+        });
         $('#searchstudy').keyup(function(){searchshow(this);});
     });
     </script>

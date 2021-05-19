@@ -86,14 +86,6 @@ CREATE TABLE `doctrine_migration_versions` (
   `execution_time` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Dumping data for table `doctrine_migration_versions`
---
-
-INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
-('DoctrineMigrations\\Version20210423062127', '2021-04-23 10:48:55', 340),
-('DoctrineMigrations\\Version20210426065948', '2021-04-26 12:36:34', 1314);
-
 -- --------------------------------------------------------
 
 --
@@ -175,11 +167,15 @@ CREATE TABLE `queue_table` (
 --
 
 INSERT INTO `queue_table` (`id`, `studies_id`, `isrun`) VALUES
-(1, 3, 0),
-(2, 7, 0),
+(1, 1, 0),
+(2, 2, 0),
 (3, 3, 0),
-(4, 8, 0),
-(5, 10, 0);
+(4, 4, 0),
+(5, 7, 0),
+(6, 8, 0),
+(7, 9, 0),
+(8, 10, 0),
+(9, 11, 0);
 
 -- --------------------------------------------------------
 
@@ -251,16 +247,6 @@ CREATE TABLE `studies_json` (
   `isactive` tinyint(1) NOT NULL DEFAULT '1',
   `creatred_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `studies_json`
---
-
-INSERT INTO `studies_json` (`id`, `studies_id`, `json`, `isactive`, `creatred_date`) VALUES
-(1, 8, '{\"id\":8,\"shortTitle\":\"BCMT SUB\",\"title\":\"Breast cancer molecular types 1\",\"description\":null,\"eudraCt\":null,\"nct\":null,\"drks\":null,\"isactive\":true,\"studyPhase\":{\"id\":3,\"title\":\"3\",\"description\":null,\"isactive\":true},\"user\":{\"id\":1,\"firstname\":\"Firstname\",\"lastname\":\"Lastname\",\"email\":\"admin@bzkf.com\",\"username\":\"admin\",\"roles\":[\"ROLE_USER\"],\"salt\":null},\"diagnosesCodeIcd10\":[],\"mutations\":[{\"id\":7,\"mutation\":\"mutation5\",\"studiesId\":8,\"studies\":8}],\"categoryDiseases\":[{\"id\":1,\"name\":\"lung cancer\",\"description\":null,\"categoryDiseasesId\":null,\"userId\":1,\"isactive\":true},{\"id\":3,\"name\":\"Small cell lung cancer\",\"description\":null,\"categoryDiseasesId\":1,\"userId\":1,\"isactive\":true}],\"hospitalLocations\":[{\"id\":2,\"name\":\"U1 Hospital Location 2\",\"description\":null,\"email\":\"u1l2@bkzf.com\",\"phone\":\"7896541230\",\"address\":\"Rechts der Isar Munich\",\"pin\":123456,\"latitude\":null,\"longitude\":null,\"universityHospitalsId\":1,\"userId\":1,\"isactive\":true,\"universityHospitals\":{\"id\":1,\"name\":\"University1\",\"description\":null,\"email\":\"university@bkzf.com\",\"phone\":\"9876543210\",\"address\":\"Rechts der Isar Munich\",\"pin\":123456,\"latitude\":null,\"longitude\":null,\"userId\":1,\"isactive\":true}}]}', 1, '2021-05-05 06:42:08'),
-(2, 10, '{\"id\":10,\"shortTitle\":\"BCMT SUB 2\",\"title\":\"Breast cancer molecular types 2\",\"description\":null,\"eudraCt\":\"EudraCT-6\",\"nct\":\"NCT-6\",\"drks\":\"DRKS-6\",\"isactive\":true,\"studyPhase\":{\"id\":1,\"title\":\"1\",\"description\":null,\"isactive\":true},\"user\":{\"id\":1,\"firstname\":\"Firstname\",\"lastname\":\"Lastname\",\"email\":\"admin@bzkf.com\",\"username\":\"admin\",\"roles\":[\"ROLE_USER\"],\"salt\":null},\"diagnosesCodeIcd10\":[{\"id\":14,\"code\":\"test\",\"studiesId\":10,\"studies\":10},{\"id\":15,\"code\":\"test\",\"studiesId\":10,\"studies\":10}],\"mutations\":[{\"id\":9,\"mutation\":\"mutation 6\",\"studiesId\":10,\"studies\":10},{\"id\":11,\"mutation\":\"mutation 6\",\"studiesId\":10,\"studies\":10},{\"id\":12,\"mutation\":\"mutation 6\",\"studiesId\":10,\"studies\":10}],\"categoryDiseases\":[{\"id\":1,\"name\":\"lung cancer\",\"description\":null,\"categoryDiseasesId\":null,\"userId\":1,\"isactive\":true},{\"id\":2,\"name\":\"Non-small cell lung cancer\",\"description\":null,\"categoryDiseasesId\":1,\"userId\":1,\"isactive\":true}],\"hospitalLocations\":[{\"id\":2,\"name\":\"U1 Hospital Location 2\",\"description\":null,\"email\":\"u1l2@bkzf.com\",\"phone\":\"7896541230\",\"address\":\"Rechts der Isar Munich\",\"pin\":123456,\"latitude\":null,\"longitude\":null,\"universityHospitalsId\":1,\"userId\":1,\"isactive\":true,\"universityHospitals\":{\"id\":1,\"name\":\"University1\",\"description\":null,\"email\":\"university@bkzf.com\",\"phone\":\"9876543210\",\"address\":\"Rechts der Isar Munich\",\"pin\":123456,\"latitude\":null,\"longitude\":null,\"userId\":1,\"isactive\":true}}]}', 1, '2021-05-05 11:05:43'),
-(3, 3, '{\"id\":3,\"shortTitle\":\"BCMT\",\"title\":\"Breast cancer molecular types\",\"description\":null,\"eudraCt\":\"EudraCT-3\",\"nct\":\"NCT-3\",\"drks\":\"DRKS-3\",\"isactive\":true,\"studyPhase\":{\"id\":3,\"title\":\"3\",\"description\":null,\"isactive\":true},\"user\":{\"id\":1,\"firstname\":\"Firstname\",\"lastname\":\"Lastname\",\"email\":\"admin@bzkf.com\",\"username\":\"admin\",\"roles\":[\"ROLE_USER\"],\"salt\":null},\"diagnosesCodeIcd10\":[],\"mutations\":[{\"id\":3,\"mutation\":\"mutation3\",\"studiesId\":3,\"studies\":3}],\"categoryDiseases\":[{\"id\":4,\"name\":\"breast cancer\",\"description\":null,\"categoryDiseasesId\":null,\"userId\":1,\"isactive\":true}],\"hospitalLocations\":[{\"id\":1,\"name\":\"U1 Hospital Location 1\",\"description\":null,\"email\":\"u1l1@bkzf.com\",\"phone\":\"3216549870\",\"address\":\"Rechts der Isar Munich\",\"pin\":123456,\"latitude\":null,\"longitude\":null,\"universityHospitalsId\":1,\"userId\":1,\"isactive\":true,\"universityHospitals\":{\"id\":1,\"name\":\"University1\",\"description\":null,\"email\":\"university@bkzf.com\",\"phone\":\"9876543210\",\"address\":\"Rechts der Isar Munich\",\"pin\":123456,\"latitude\":null,\"longitude\":null,\"userId\":1,\"isactive\":true}}]}', 1, '2021-05-05 11:06:19'),
-(4, 7, '{\"id\":7,\"shortTitle\":\"BCMT SUB\",\"title\":\"Breast cancer molecular types 1\",\"description\":null,\"eudraCt\":null,\"nct\":null,\"drks\":null,\"isactive\":true,\"studyPhase\":{\"id\":2,\"title\":\"2\",\"description\":null,\"isactive\":true},\"user\":{\"id\":1,\"firstname\":\"Firstname\",\"lastname\":\"Lastname\",\"email\":\"admin@bzkf.com\",\"username\":\"admin\",\"roles\":[\"ROLE_USER\"],\"salt\":null},\"diagnosesCodeIcd10\":[],\"mutations\":[{\"id\":5,\"mutation\":\"mutation5\",\"studiesId\":7,\"studies\":7},{\"id\":6,\"mutation\":\"mutation6\",\"studiesId\":7,\"studies\":7}],\"categoryDiseases\":[],\"hospitalLocations\":[{\"id\":2,\"name\":\"U1 Hospital Location 2\",\"description\":null,\"email\":\"u1l2@bkzf.com\",\"phone\":\"7896541230\",\"address\":\"Rechts der Isar Munich\",\"pin\":123456,\"latitude\":null,\"longitude\":null,\"universityHospitalsId\":1,\"userId\":1,\"isactive\":true,\"universityHospitals\":{\"id\":1,\"name\":\"University1\",\"description\":null,\"email\":\"university@bkzf.com\",\"phone\":\"9876543210\",\"address\":\"Rechts der Isar Munich\",\"pin\":123456,\"latitude\":null,\"longitude\":null,\"userId\":1,\"isactive\":true}}]}', 1, '2021-05-05 11:08:28');
 
 -- --------------------------------------------------------
 

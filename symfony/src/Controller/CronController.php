@@ -14,14 +14,8 @@ class CronController extends AbstractController
      */
     public function createjson(CreatejsonService $createJson)
     {
-        $jsonresult = $createJson->createjson();
-        if($jsonresult){
-            $result = $createJson->indexBuilder();
-            dd($result);
-        }else{
-            dd('Empty');
-        }
-        
+        $jsonresult = $createJson->indexBuilder();
+        dd($jsonresult);
     }
 
     /**
