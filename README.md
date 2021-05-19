@@ -27,7 +27,7 @@ docker exec -d php-fpm sh -c "composer install"
 You can also use an interactive terminal and execute the composer install
 
 ```bash
-docker exec -it php-fpm sh 
+docker exec -it php-fpm sh -c "composer install"
 ```
 
 Please wait for a while as it may take a few minutes to install the dependencies and clear cache.
