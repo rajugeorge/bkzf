@@ -30,6 +30,11 @@
                             
 
                         </div>
+                        <div id='study_search_list' style="display: none;" class='row'>
+
+                            
+
+                        </div>
                         <div class='blog-pager' id='blog-pager'>
                             <a class='home-link' href='index.html'>Home</a>
                             <span id='blog-pager-older-link'>
@@ -58,7 +63,7 @@
             type: "GET",
             data: {start:start},
             beforeSend: function() {
-                $('#showmore').html('<img style="height: 100%" src="{{ asset('assets/img/loader-trn.gif') }}">');
+                $('#showmore').html('<img style="height: 100%" src="{{ asset("assets/img/loader-trn.gif") }}">');
             },
             success: function(result){
                 if(result){
@@ -70,8 +75,53 @@
             }
         });
     }
+
+    function delay(callback, ms) {
+        var timer = 0;
+        return function() {
+            var context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                callback.apply(context, args);
+            }, ms || 0);
+        };
+    }
+
+    function ajaxsearchstudy(q){
+        var url = '{{ path("searchstudies") }}';
+        var start = $('#post_grids .study').length;
+        if(q != ''){
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {q:q},
+                success: function(result){
+                    $("#study_search_list").show();
+                    $("#post_grids").hide();
+                    $("#study_search_list").html(result);
+                    $('#showmore').hide();
+                }
+            });
+        }else{
+            $("#study_search_list").hide();
+            $("#post_grids").show();
+            $('#showmore').show();
+        }
+    }
+    function searchshow($el){
+        if($el.value != ''){
+            $($el).addClass('show');
+        }else{
+            $($el).removeClass('show');
+        }
+    }
+
     $( document ).ready(function() {
         showmoreStudy();
+        $('#searchstudy').keyup(delay(function (e) {
+            ajaxsearchstudy(this.value);
+        }, 300));
+        $('#searchstudy').keyup(function(){searchshow(this);});
     });
     </script>
 {% endblock %}

@@ -27,7 +27,8 @@ class UserFixture extends Fixture
             $this->encoder->encodePassword($user,'admin')
         );
         $user->setEmail('admin@bzkf.com');
-        $user->setRole('ROLE_USER');        
+        $user->setRole('ROLE_ADMIN');        
+        $user->setLastlogin();        
         $manager->persist($user);
 
         $manager->flush();

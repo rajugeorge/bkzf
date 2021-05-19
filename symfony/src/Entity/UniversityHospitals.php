@@ -74,7 +74,7 @@ class UniversityHospitals
      * @ORM\Column(type="boolean")
      */
     
-    private $isactive;
+    private $isactive = true;
 
     /**
      * One university has many locations. This is the inverse side.
@@ -205,9 +205,9 @@ class UniversityHospitals
         return $this->updatedDate;
     }*/
 
-    public function setUpdatedDate(\DateTimeInterface $updatedDate): self
+    public function setUpdatedDate(): self
     {
-        $this->updatedDate = $updatedDate;
+        $this->updatedDate = new \DateTime("now");
 
         return $this;
     }

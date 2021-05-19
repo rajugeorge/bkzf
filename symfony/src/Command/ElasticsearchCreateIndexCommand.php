@@ -38,7 +38,11 @@ class ElasticsearchCreateIndexCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->createJsonService->indexBuilder();
+
+        $jsonresult = $this->createJsonService->createjson();
+        if($jsonresult){
+            $this->createJsonService->indexBuilder();
+        }
 
         $io = new SymfonyStyle($input, $output);
 

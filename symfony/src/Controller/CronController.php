@@ -19,7 +19,7 @@ class CronController extends AbstractController
             $result = $createJson->indexBuilder();
             dd($result);
         }else{
-            dd('fails');
+            dd('Empty');
         }
         
     }

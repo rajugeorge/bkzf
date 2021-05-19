@@ -31,7 +31,7 @@ class CreatejsonService
 
     public function createjson()
     {
-        $pagination = 20;
+        $pagination = $this->params->get('cronpagination');
 
         $encoders = [new JsonEncoder()]; // If no need for XmlEncoder
         $normalizers = [new ObjectNormalizer()];
@@ -102,7 +102,10 @@ class CreatejsonService
     public function indexBuilder(){
 
         $manager = $this->entityManager;
-        $stdJsons = $manager->getRepository(StudiesJson::class)->findBy(array('isactive'=>true));
+
+        $pagination = $this->params->get('cronpagination');
+
+        $stdJsons = $manager->getRepository(StudiesJson::class)->findBy(array('isactive'=>true),array(),$pagination);
 
         $elasticUrl = $this->params->get('elasticsearch_url');
 

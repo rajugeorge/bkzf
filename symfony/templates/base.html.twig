@@ -78,14 +78,16 @@
                         <li class="{% if app.request.get('_route') == 'login' %} active {% endif %}"><a href='{{ path('login') }}' itemprop='url'><span itemprop='name'>Login</span></a></li>
                         {% endif %}
                     </ul>
+                    {% if app.request.get('_route') == 'index' %}
                     <div class='search-bar'>
                         <div class='nav-search'>
-                            <form action='#' id='searchform' method='get' role='search'>
-                                <input class='search_input' id='s' name='q' onblur="if(this.value==&#39;&#39;)this.value=this.defaultValue;" onfocus='if(this.value==this.defaultValue)this.value=&#39;&#39;' type='text' value='Search and hit'/>
-                            </form>
+                            <!-- <form action='#' id='searchform' method='get' role='search'> -->
+                                <input class='search_input' id='searchstudy' name='q' placeholder="Search" type='text' autocomplete="off" />
+                            <!-- </form> -->
                             <div class='srch_btn'></div>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
             <div class='clear'></div>

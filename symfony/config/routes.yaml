@@ -59,4 +59,6 @@ bzkf_studyjson:
    path: /bzkf/studyjson
    controller: App\Controller\SiteController::studyjson
 
-
+searchstudies:
+   path: /searchstudies
+   controller: App\Controller\SiteController::searchstudies

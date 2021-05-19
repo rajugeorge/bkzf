@@ -82,7 +82,7 @@ class HospitalLocations
      * @ORM\Column(type="boolean")
      */
     
-    private $isactive;
+    private $isactive = true;
 
     /**
      * Many Locations have one university. This is the owning side.
@@ -236,9 +236,9 @@ class HospitalLocations
         return $this->updatedDate;
     }*/
 
-    public function setUpdatedDate(\DateTimeInterface $updatedDate): self
+    public function setUpdatedDate(): self
     {
-        $this->updatedDate = $updatedDate;
+        $this->updatedDate = new \DateTime("now");;
 
         return $this;
     }

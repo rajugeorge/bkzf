@@ -17,6 +17,7 @@ use App\Repository\StudyPhaseRepository;
 use App\Repository\UniversityHospitalsRepository;
 use DateTime;
 use Doctrine\DBAL\Connection;
+use Elasticsearch\ClientBuilder;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -40,9 +41,31 @@ class SiteController extends AbstractController
         $start = $request->query->get('start');
         $length = 6;
 
+        $elasticUrl = $this->getParameter('elasticsearch_url');
+        $hosts = [$elasticUrl];
+        $client = ClientBuilder::create()->setHosts($hosts)->build();
 
-        $studies = $studiesRepository->findBy(array(), array('id' => 'DESC'),$length,$start);
-        return $this->render('site/getstudies.html.twig', [
+        $params = [
+            'index' => 'studies',
+            'body' => [
+                'query' => [
+                    "match_all"=> (object)[]
+                ],
+                "size"=> $length,
+                "from"=> $start
+            ]
+        ];
+
+        try{
+            $response = $client->search($params);
+            $studies = $response['hits']['hits'];
+        }catch(Exception $e){
+            $studies = array();
+            $error = $e->getMessage();
+        }
+
+        // $studies = $studiesRepository->findBy(array(), array('id' => 'DESC'),$length,$start);
+        return $this->render('site/getstudies-search.html.twig', [
             'studies' => $studies,
         ]);
     }
@@ -443,6 +466,39 @@ class SiteController extends AbstractController
         foreach($stdyJson as $json){
             dump(json_decode($json->getJson()));
         }exit;
+    }
+
+    public function searchstudies(Request $request){
+        $searchkey = $request->query->get('q');
+
+        $elasticUrl = $this->getParameter('elasticsearch_url');
+        $hosts = [$elasticUrl];
+        $client = ClientBuilder::create()->setHosts($hosts)->build();
+
+        $params = [
+            'index' => 'studies',
+            'body' => [
+                'query' => [
+                    "multi_match"=> [
+                        "query"=> $searchkey,
+                        "type"=> "best_fields",
+                        "fields" => ["title","shortTitle"],
+                        "operator"=> "or"
+                    ]
+                ]
+            ]
+        ];
+        try{
+            $response = $client->search($params);
+            $studies = $response['hits']['hits'];
+        }catch(Exception $e){
+            $studies = array();
+        }
+
+        // dd($studies);
+        return $this->render('site/getstudies-search.html.twig', [
+            'studies' => $studies,
+        ]);
     }
 
 

@@ -1,0 +1,31 @@
+{% for studyp in studies %}
+{% set study = studyp._source %}
+{% set id = study.id %}
+<div class="four columns post_col masonry-brick hentry study">
+    <div class="post_item">
+        <div class="post-body">
+            <span id="p8653783103981538811">
+                <h3 class="post_item_title" style="margin-bottom: 0;">
+                    <a rel="bookmark" href="{{ path('viewstudies', {'id': study.id}) }}">{{ study.shortTitle }}</a>
+                </h3>
+                <div class="post_meta">
+                    <span class="user">by <span style="color: #09BBB2;">Admin</span></span> <a href="{{ path('bzkf_editstudies',{ 'id': study.id }) }}"><span class="edit">Edit</span></a>
+                </div>
+                <a href="{{ path('viewstudies', {'id': study.id}) }}">
+                    <div class="large_thumb thumb_hover">
+                        <div class="img_wrapper">
+                            <img class="thumb" src="{{ asset('assets/img/dt-234.jpg') }}">
+                        </div>
+                    </div>
+                </a>
+                <div class="post_item_inner">
+                    <p>{{ study.title }}</p>
+                    <a class="button normal" rel="bookmark" href="{{ path('viewstudies', {'id': study.id}) }}">Continue Reading</a>
+                    <div class="clear"></div>
+                </div>
+            </span>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+{% endfor %}

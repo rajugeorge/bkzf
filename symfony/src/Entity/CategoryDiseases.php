@@ -52,7 +52,7 @@ class CategoryDiseases
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isactive;
+    private $isactive = true;
 
     /**
      * One Category has Many Categories.
